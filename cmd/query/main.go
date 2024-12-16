@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"log"
-	"web-10/internal/hello/api"
-	"web-10/internal/hello/config"
-	"web-10/internal/hello/provider"
-	"web-10/internal/hello/usecase"
+	"web-10/internal/query/api"
+	"web-10/internal/query/config"
+	"web-10/internal/query/provider"
+	"web-10/internal/query/usecase"
 
 	_ "github.com/lib/pq"
 )
@@ -22,12 +22,11 @@ func main() {
 	}
 
 	prv := provider.NewProvider(cfg.DB.Host, cfg.DB.Port, cfg.DB.User, cfg.DB.Password, cfg.DB.DBname)
-	use := usecase.NewUsecase(cfg.Usecase.DefaultMessage, prv)
+	use := usecase.NewUsecase(cfg.Usecase.DefaultMessageQuery, prv)
 	srv := api.NewServer(cfg.IP, cfg.Port, cfg.API.MaxMessageSize, use)
 
 	srv.Run()
 }
 
-// curl -X POST -H "Content-Type: application/json" -d '{"msg": "Привет, мир!"}' http://127.0.0.1:8081/hello
-// curl -X POST -H "Content-Type: application/json" -d '{"msg": "мир!"}' http://127.0.0.1:8081/hello
-// curl -X GET http://127.0.0.1:8081/hello
+// curl -X POST "http://localhost:8083/user?name=User4"
+// curl "http://localhost:8083/user?name=Men-fish"
